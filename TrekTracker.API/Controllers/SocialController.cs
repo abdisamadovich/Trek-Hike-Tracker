@@ -21,7 +21,8 @@ public class SocialController : ControllerBase
 
     private int GetUserId()
     {
-        return int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        return int.TryParse(userIdClaim, out var userId) ? userId : 0;
     }
 
     // Like endpoints

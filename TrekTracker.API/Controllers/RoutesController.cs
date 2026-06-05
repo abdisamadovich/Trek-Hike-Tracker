@@ -20,6 +20,12 @@ public class RoutesController : ControllerBase
         _mediator = mediator;
     }
 
+    private int GetUserId()
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        return int.TryParse(userIdClaim, out var userId) ? userId : 0;
+    }
+
     [HttpGet]
     public async Task<ActionResult<PagedResponseDto<RouteResponseDto>>> GetRoutes(
         [FromQuery] string? search,
@@ -62,7 +68,7 @@ public class RoutesController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<RouteResponseDto>> CreateRoute([FromBody] CreateRouteRequestDto request)
     {
-        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+        var userId = GetUserId();
         if (userId == 0)
             return Unauthorized();
 
@@ -75,7 +81,7 @@ public class RoutesController : ControllerBase
     [HttpPut("{id}")]
     public async Task<ActionResult<RouteResponseDto>> UpdateRoute(int id, [FromBody] UpdateRouteRequestDto request)
     {
-        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+        var userId = GetUserId();
         if (userId == 0)
             return Unauthorized();
 
@@ -89,7 +95,7 @@ public class RoutesController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<ActionResult<bool>> DeleteRoute(int id)
     {
-        var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+        var userId = GetUserId();
         if (userId == 0)
             return Unauthorized();
 

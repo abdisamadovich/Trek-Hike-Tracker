@@ -19,9 +19,12 @@ public class AuthService : IAuthService
 
     public async Task<LoginResponseDto> LoginAsync(LoginRequestDto request, CancellationToken ct = default)
     {
+        var normalizedEmail = request.Email.ToLower().Trim();
         var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Email == request.Email && u.IsActive, ct)
-            ?? throw new InvalidOperationException("Invalid email or password");
+            .FirstOrDefaultAsync(u => u.Email.ToLower() == normalizedEmail && u.IsActive, ct);
+
+        if (user == null)
+            throw new InvalidOperationException("Invalid email or password");
 
         if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             throw new InvalidOperationException("Invalid email or password");
@@ -47,15 +50,16 @@ public class AuthService : IAuthService
         if (request.Password != request.PasswordConfirm)
             throw new InvalidOperationException("Passwords do not match");
 
+        var normalizedEmail = request.Email.ToLower().Trim();
         var existingUser = await _context.Users
-            .FirstOrDefaultAsync(u => u.Email == request.Email, ct);
+            .FirstOrDefaultAsync(u => u.Email.ToLower() == normalizedEmail, ct);
 
         if (existingUser != null)
             throw new InvalidOperationException("User with this email already exists");
 
         var user = new User
         {
-            Email = request.Email,
+            Email = normalizedEmail,
             Username = request.Username,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
             CreatedAt = DateTime.UtcNow,
