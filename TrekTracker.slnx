@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="TrekTracker.API/TrekTracker.API.csproj" />
+  <Project Path="TrekTracker.Application/TrekTracker.Application.csproj" />
+  <Project Path="TrekTracker.Domain/TrekTracker.Domain.csproj" />
+  <Project Path="TrekTracker.Infrastructure/TrekTracker.Infrastructure.csproj" />
+</Solution>

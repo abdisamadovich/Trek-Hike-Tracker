@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(Get-ChildItem -Path \"d:\\\\Islom\\\\Trek-Hike-Tracker\" -Depth 2)",
+      "Bash(Select-Object FullName)",
+      "PowerShell(dotnet tool update --global dotnet-ef --version 8.0.0)",
+      "PowerShell(New-Item -ItemType Directory -Path \"d:\\\\Islom\\\\Trek-Hike-Tracker\\\\TrekTracker.Infrastructure\\\\Features\\\\Routes\\\\Handlers\" -Force)"
+    ]
+  }
+}
